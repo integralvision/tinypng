@@ -1,0 +1,60 @@
+<?php
+/**
+ * @file
+ * Provides TinyPNG integration.
+ */
+
+/**
+ * @ingroup image
+ * @{
+ */
+
+/**
+ * Load TinyPNG library.
+ */
+function tinypng_load_library() {
+  $dir = libraries_get_path('tinify-php');
+  if (!$dir) {
+    drupal_set_message(t('You have to download Tinify PHP library from !link', array(
+      '!link' => t('https://github.com/tinify/tinify-php/', 'https://github.com/tinify/tinify-php/'),
+    )));
+  }
+
+  $api_key = variable_get('tinypng_api_key');
+  if (!$dir || !$api_key) {
+    return FALSE;
+  }
+
+  $files = array(
+    'lib/Tinify.php',
+    'lib/Tinify/Client.php',
+    'lib/Tinify/Exception.php',
+    'lib/Tinify/Result.php',
+    'lib/Tinify/Source.php',
+  );
+  foreach ($files as $file) {
+    $path = $dir . '/' . $file;
+    if (is_readable($path)) {
+      require_once $path;
+    }
+  }
+
+  Tinify\setKey($api_key);
+  return TRUE;
+}
+
+/**
+ * Implements hook_image_toolkits().
+ */
+function tinypng_image_toolkits() {
+  return array(
+    'tinypng' => array(
+      'title' => t('TinyPNG'),
+      'available' => TRUE,
+    ),
+  );
+}
+
+/**
+ * @} End of "addtogroup image".
+ */
