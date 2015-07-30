@@ -96,5 +96,19 @@ function image_tinypng_settings() {
 }
 
 /**
+ * Wrapper for image toolkit functions.
+ */
+function _tinypng_fallback($method) {
+  $fallback = variable_get('tinypng_fallback_toolkit', 'gd');
+  $args = func_get_args();
+  $method = array_shift($args);
+  $function = 'image_' . $fallback . '_' . $method;
+  if (is_callable($function)) {
+    return call_user_func_array($function, $args);
+  }
+  return FALSE;
+}
+
+/**
  * @} End of "addtogroup image".
  */
