@@ -122,7 +122,17 @@ function _tinypng_fallback($method) {
  * @see image_save()
  */
 function image_tinypng_save(stdClass $image, $destination) {
-  return _tinypng_fallback('save', $image, $destination);;
+  $res = _tinypng_fallback('save', $image, $destination);;
+  try {
+    if (tinypng_load_library()) {
+      $dest = drupal_realpath($destination);
+      $res = Tinify\fromFile($dest)->toFile($dest);
+    }
+  }
+  catch (Exception $e) {
+    watchdog('tinypng', $e->getMessage(), array(), WATCHDOG_ERROR);
+  }
+  return $res;
 }
 
 /**
