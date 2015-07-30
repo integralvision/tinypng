@@ -56,5 +56,45 @@ function tinypng_image_toolkits() {
 }
 
 /**
+ * Retrieve settings for the TinyPNG toolkit.
+ */
+function image_tinypng_settings() {
+  $form['tinypng'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('TinyPNG'),
+    '#collapsible' => FALSE,
+    '#description' => t('TinyPNG uses smart lossy compression techniques to reduce the file size of your PNG files. By selectively decreasing the number of colors in the image, fewer bytes are required to store the data. The effect is nearly invisible but it makes a very large difference in file size!'),
+  );
+
+  $form['tinypng']['tinypng_api_key'] = array(
+    '#type' => 'textfield',
+    '#title' => t('TinyPNG API key'),
+    '#default_value' => variable_get('tinypng_api_key'),
+    '#description' => t('Get your API key at !link.', array(
+      '!link' => l('https://tinypng.com/developers', 'https://tinypng.com/developers'),
+    )),
+  );
+
+  $toolkits_available = image_get_available_toolkits();
+  $fallback = variable_get('tinypng_fallback_toolkit', 'gd');
+  unset($toolkits_available['tinypng']);
+  $form['tinypng']['tinypng_fallback_toolkit'] = array(
+    '#type' => 'select',
+    '#title' => t('Fallback image toolkit'),
+    '#default_value' => $fallback,
+    '#options' => $toolkits_available,
+  );
+
+
+  // Get the toolkit's settings form.
+  $function = 'image_' . $fallback . '_settings';
+  if (function_exists($function)) {
+    $form['tinypng']['fallback_toolkit_settings'] = $function();
+  }
+
+  return $form;
+}
+
+/**
  * @} End of "addtogroup image".
  */
