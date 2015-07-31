@@ -43,6 +43,8 @@ INSTALLATION
 Download Tinify PHP library from https://github.com/tinify/tinify-php/
 and place it under $DRUPAL_ROOT/sites/all/libraries
 
+You can install Tinify PHP with drush: just run drush tinypng-library
+
 Install as you would normally install a contributed Drupal module.
 See: https://drupal.org/documentation/install/modules-themes/modules-7
 for further information.
