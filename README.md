@@ -59,3 +59,4 @@ Save the form. Then setup the secondary toolkit too.
 MAINTAINERS
 ------------
 Vince Tikász, https://www.drupal.org/u/tikaszvince
+István Csáki, https://www.drupal.org/u/csakiistvan
