@@ -8,5 +8,6 @@
  * Implements hook_uninstall().
  */
 function tinypng_uninstall() {
-  variable_del('tinypng_api_key', 'tinypng_fallback_toolkit');
+  variable_del('tinypng_api_key');
+  variable_del('tinypng_fallback_toolkit');
 }
