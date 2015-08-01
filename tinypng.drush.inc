@@ -40,6 +40,18 @@ function tinypng_drush_help($section) {
 }
 
 /**
+ * Implements drush_MODULE_post_COMMAND().
+ */
+function drush_tinypng_post_pm_enable() {
+  $modules = func_get_args();
+
+  // Download library if TinyPNG module has been enabled.
+  if (in_array('tinypng', $modules)) {
+    drush_tinypng_tinify_download();
+  }
+}
+
+/**
  * Command to download the Tinify PHP Library.
  */
 function drush_tinypng_tinify_download() {
