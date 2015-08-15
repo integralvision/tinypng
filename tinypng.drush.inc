@@ -89,9 +89,13 @@ function drush_tinypng_tinify_download() {
     drush_tarball_extract($filename, $dirname);
     drush_move_dir(TINIFY_PHP_VERSION . '/' . TINIFY_PHP_DIRNAME . '-' . TINIFY_PHP_VERSION, TINIFY_PHP_DIRNAME, TRUE);
     drush_delete_dir(TINIFY_PHP_VERSION);
+
+    // Delete the zip archive.
+    @chmod($filename, 0777);
+    unlink($filename);
   }
 
-  if (is_dir($dirname)) {
+  if (is_dir(TINIFY_PHP_DIRNAME)) {
     drush_log(dt('Tinify PHP library has been installed in @path', array('@path' => $path)), 'success');
   }
   else {
