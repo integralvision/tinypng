@@ -16,6 +16,9 @@ if (module_exists('smartcrop')) {
 if (module_exists('textimage')) {
   include 'include/textimage.inc';
 }
+if (module_exists('filtersie')) {
+  include 'include/filtersie.inc';
+}
 
 /**
  * Implements hook_help().
