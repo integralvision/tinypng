@@ -7,6 +7,9 @@
 define('TINIFY_PHP_DIRNAME', 'tinify-php');
 
 include 'include/image.inc';
+if (module_exists('imagecache_actions')) {
+  include 'include/imagecache_actions.inc';
+}
 
 /**
  * Implements hook_help().
