@@ -13,6 +13,9 @@ if (module_exists('imagecache_actions')) {
 if (module_exists('smartcrop')) {
   include 'include/smartcrop.inc';
 }
+if (module_exists('textimage')) {
+  include 'include/textimage.inc';
+}
 
 /**
  * Implements hook_help().
