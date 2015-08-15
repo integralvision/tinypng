@@ -10,7 +10,12 @@ CONTENTS OF THIS FILE
  
 INTRODUCTION
 ------------
-Provides TinyPNG integration for Drupal 7.
+Provides TinyPNG integration for Drupal 7. This module creates a new
+ImageToolkit which uses other toolkits in the background. The secondary toolkit
+could be the core GD or ImageMagick toolkit provided by ImageMagick module.
+
+In the background TinyPNG module just calls the functions of secondary toolkit
+but in the last step it sends the image to the TinyPNG API to compress it.
  
 What does TinyPNG do?
 TinyPNG uses smart lossy compression techniques to reduce the file size of your
