@@ -39,13 +39,13 @@ Libraries module
 A TinyPNG API key
 You can request one for free at https://tinypng.com/developers.
 
-Tinify PHP library
+Tinify PHP library >= 0.9.1
 You can download it from https://github.com/tinify/tinify-php/
 
  
 INSTALLATION
 ------------
-Download Tinify PHP library from https://github.com/tinify/tinify-php/
+Download Tinify PHP library v0.9.1+ from https://github.com/tinify/tinify-php/
 and place it under $DRUPAL_ROOT/sites/all/libraries
 
 You can also install Tinify PHP with drush: just run drush tinypng-library.
