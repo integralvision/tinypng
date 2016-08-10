@@ -56,6 +56,7 @@ function tinypng_load_library() {
     'lib/Tinify.php',
     'lib/Tinify/Client.php',
     'lib/Tinify/Exception.php',
+    'lib/Tinify/ResultMeta.php',
     'lib/Tinify/Result.php',
     'lib/Tinify/Source.php',
   );
