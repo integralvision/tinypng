@@ -1,0 +1,7 @@
+tinypng.settings.form:
+  path: 'admin/config/tinypng'
+  defaults:
+    _form: '\Drupal\tinypng\Form\SettingsForm'
+    _title: 'TinyPNG Settings'
+  requirements:
+    _permission: 'administer tynipng'

@@ -1,0 +1,5 @@
+name: TinyPNG
+description: Provides TinyPNG integration.
+core: 8.x
+type: module
+configure: tinypng.settings.form

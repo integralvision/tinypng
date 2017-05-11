@@ -1,168 +1,38 @@
 <?php
-/**
- * @file
- * Provides TinyPNG integration.
- */
 
-define('TINIFY_PHP_DIRNAME', 'tinify-php');
-
-include 'include/image.inc';
-if (module_exists('imagecache_actions')) {
-  include 'include/imagecache_actions.inc';
-}
-if (module_exists('smartcrop')) {
-  include 'include/smartcrop.inc';
-}
-if (module_exists('textimage')) {
-  include 'include/textimage.inc';
-}
-if (module_exists('filtersie')) {
-  include 'include/filtersie.inc';
-}
+use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Implements hook_help().
+ * Implements hook_entity_presave().
+ *
+ * Process the image with TinyPNG service.
  */
-function tinypng_help($path, $arg) {
-  switch ($path) {
-    case 'admin/help#tinypng':
-      $output = file_get_contents(drupal_get_path('module', 'tinypng') . '/README.txt');
-      return module_exists('markdown') ? filter_xss_admin(module_invoke('markdown', 'filter', 'process', 0, -1, $output)) : '<pre>' . check_plain($output) . '</pre>';
-  }
-}
+function tinypng_entity_presave(EntityInterface $entity) {
+  $config = \Drupal::config('tinypng.settings');
 
-/**
- * @ingroup image
- * @{
- */
+  if ($entity->isNew() && $entity->getEntityTypeId() == 'file' && empty(file_validate_is_image($entity)) ) {
+    $config = \Drupal::config('tinypng.settings');
+    $api_key = $config->get('api_key');
+    // Skip if no api key is set.
+    if (empty($api_key)) {
+      return;
+    }
+    // Compress image.
+    $image_path = $entity->getFileUri();
+    \Tinify\setKey($api_key);
+    $dest = drupal_realpath($image_path);
 
-/**
- * Load TinyPNG library.
- */
-function tinypng_load_library() {
-  $dir = libraries_get_path(TINIFY_PHP_DIRNAME);
-  if (!$dir) {
-    drupal_set_message(t('You have to download Tinify PHP library from !link', array(
-      '!link' => t('https://github.com/tinify/tinify-php/', 'https://github.com/tinify/tinify-php/'),
-    )));
-  }
-
-  $api_key = variable_get('tinypng_api_key');
-  if (!$dir || !$api_key) {
-    return FALSE;
-  }
-
-  $files = array(
-    'lib/Tinify.php',
-    'lib/Tinify/Client.php',
-    'lib/Tinify/Exception.php',
-    'lib/Tinify/ResultMeta.php',
-    'lib/Tinify/Result.php',
-    'lib/Tinify/Source.php',
-  );
-  foreach ($files as $file) {
-    $path = $dir . '/' . $file;
-    if (is_readable($path)) {
-      require_once $path;
+    try {
+      if ($config->get('integration_method') == 'download') {
+        $origin = file_create_url($image_path);
+        $res = \Tinify\fromUrl($origin, $dest);
+      }
+      else {
+        $res = Tinify\fromFile($dest)->toFile($dest);
+      }
+    }
+    catch (Exception $ex) {
+      \Drupal::logger('tinypng')->error($ex->getMessage());
     }
   }
-
-  Tinify\setKey($api_key);
-  return TRUE;
 }
-
-/**
- * Implements hook_image_toolkits().
- */
-function tinypng_image_toolkits() {
-  return array(
-    'tinypng' => array(
-      'title' => t('TinyPNG'),
-      'available' => TRUE,
-    ),
-  );
-}
-
-/**
- * Retrieve settings for the TinyPNG toolkit.
- */
-function image_tinypng_settings() {
-  $form['tinypng'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('TinyPNG'),
-    '#collapsible' => FALSE,
-    '#description' => t('TinyPNG uses smart lossy compression techniques to reduce the file size of your PNG files. By selectively decreasing the number of colors in the image, fewer bytes are required to store the data. The effect is nearly invisible but it makes a very large difference in file size!'),
-  );
-
-  $form['tinypng']['tinypng_api_key'] = array(
-    '#type' => 'textfield',
-    '#title' => t('TinyPNG API key'),
-    '#default_value' => variable_get('tinypng_api_key'),
-    '#description' => t('Get your API key at !link.', array(
-      '!link' => l('https://tinypng.com/developers', 'https://tinypng.com/developers'),
-    )),
-  );
-
-  $toolkits_available = image_get_available_toolkits();
-  $fallback = variable_get('tinypng_fallback_toolkit', 'gd');
-  unset($toolkits_available['tinypng']);
-  $form['tinypng']['tinypng_fallback_toolkit'] = array(
-    '#type' => 'select',
-    '#title' => t('Fallback image toolkit'),
-    '#default_value' => $fallback,
-    '#options' => $toolkits_available,
-  );
-
-
-  // Get the toolkit's settings form.
-  $function = 'image_' . $fallback . '_settings';
-  if (function_exists($function)) {
-    $form['tinypng']['fallback_toolkit_settings'] = $function();
-  }
-
-  return $form;
-}
-
-/**
- * Wrapper for image toolkit functions.
- */
-function _tinypng_fallback($method) {
-  $fallback = variable_get('tinypng_fallback_toolkit', 'gd');
-  $args = func_get_args();
-  $method = array_shift($args);
-  $function = 'image_' . $fallback . '_' . $method;
-  if (is_callable($function)) {
-    return call_user_func_array($function, $args);
-  }
-  return FALSE;
-}
-
-/**
- * GD helper to write an image resource to a destination file.
- *
- * @param $image
- *   An image object.
- * @param $destination
- *   A string file URI or path where the image should be saved.
- * @return
- *   TRUE or FALSE, based on success.
- *
- * @see image_save()
- */
-function image_tinypng_save(stdClass $image, $destination) {
-  $res = _tinypng_fallback('save', $image, $destination);;
-  try {
-    if (tinypng_load_library()) {
-      $dest = drupal_realpath($destination);
-      $res = Tinify\fromFile($dest)->toFile($dest);
-    }
-  }
-  catch (Exception $e) {
-    watchdog('tinypng', $e->getMessage(), array(), WATCHDOG_ERROR);
-  }
-  return $res;
-}
-
-/**
- * @} End of "addtogroup image".
- */

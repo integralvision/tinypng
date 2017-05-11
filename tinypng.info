@@ -1,5 +1,0 @@
-name = TinyPNG
-description = Provides TinyPNG integration.
-core = 7.x
-configure = admin/config/media/image-toolkit
-dependencies[] = libraries
