@@ -47,7 +47,7 @@ class SettingsForm extends ConfigFormBase {
         'download' => 'Download',
         'upload' => 'Upload',
       ],
-      '#description' => t('The download method requires that your site is hosted
+      '#description' => $this->t('The download method requires that your site is hosted
        in a server accessible through the internet. The upload method is required
        on localhost.')
     );
