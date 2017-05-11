@@ -1,2 +1,3 @@
 api_key: ''
-integration_method: 'upload'
+upload_method: 'upload'
+on_upload: 0

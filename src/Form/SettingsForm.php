@@ -39,10 +39,17 @@ class SettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     );
 
-    $form['integration_method'] = array(
+    $form['on_upload'] = array(
+      '#type' => 'checkbox',
+      '#title' => $this->t('Compress on upload'),
+      '#default_value' => $config->get('on_upload'),
+      '#description' => $this->t('Enable this if you want to compress every uploaded image.')
+    );
+
+    $form['upload_method'] = array(
       '#type' => 'select',
       '#title' => $this->t('Integration Method'),
-      '#default_value' => $config->get('integration_method'),
+      '#default_value' => $config->get('upload_method'),
       '#options' => [
         'download' => 'Download',
         'upload' => 'Upload',
@@ -62,6 +69,7 @@ class SettingsForm extends ConfigFormBase {
     $values = $form_state->getValues();
     $this->config('tinypng.settings')
       ->set('api_key', $values['api_key'])
+      ->set('on_upload', (bool) $values['on_upload'])
       ->set('integration_method', $values['integration_method'])
       ->save();
   }
