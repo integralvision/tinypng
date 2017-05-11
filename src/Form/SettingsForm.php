@@ -64,6 +64,13 @@ class SettingsForm extends ConfigFormBase {
        on localhost.')
     );
 
+    $form['image_action'] = array(
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable TinyPNG image action'),
+      '#default_value' => $config->get('image_action'),
+      '#description' => $this->t('Define the TinyPNG image action that you can add to any of your image styles.')
+    );
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -76,6 +83,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('api_key', $values['api_key'])
       ->set('on_upload', (bool) $values['on_upload'])
       ->set('upload_method', $values['upload_method'])
+      ->set('image_action', (bool) $values['image_action'])
       ->save();
   }
 
