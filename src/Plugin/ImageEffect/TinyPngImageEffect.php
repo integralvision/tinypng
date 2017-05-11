@@ -24,8 +24,25 @@ class TinyPngImageEffect extends ImageEffectBase {
       return FALSE;
     }
 
+    if (!$this->checkTinyPngConfig()) {
+      return FALSE;
+    }
+
     // @todo implement this.
     return FALSE;
+  }
+
+  /**
+   * Check ImageAction mode is enabled.
+   */
+  protected function checkTinyPngConfig() {
+    $api_key = tinypng_api_key();
+    if (empty($api_key)) {
+      return FALSE;
+    }
+
+    \Tinify\setKey($api_key);
+    return tinypng_handle_with_image_actions();
   }
 
 }
