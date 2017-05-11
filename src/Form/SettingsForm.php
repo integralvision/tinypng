@@ -54,6 +54,11 @@ class SettingsForm extends ConfigFormBase {
         'download' => 'Download',
         'upload' => 'Upload',
       ],
+      '#states' => [
+        'visible' => [
+          '[data-drupal-selector="edit-on-upload"]' => ['checked' => TRUE],
+        ],
+      ],
       '#description' => $this->t('The download method requires that your site is hosted
        in a server accessible through the internet. The upload method is required
        on localhost.')
