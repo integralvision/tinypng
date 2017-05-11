@@ -43,7 +43,7 @@ function tinypng_load_library() {
   $dir = libraries_get_path(TINIFY_PHP_DIRNAME);
   if (!$dir) {
     drupal_set_message(t('You have to download Tinify PHP library from !link', array(
-      '!link' => t('https://github.com/tinify/tinify-php/', 'https://github.com/tinify/tinify-php/'),
+      '!link' => l('https://github.com/tinify/tinify-php/', 'https://github.com/tinify/tinify-php/'),
     )));
   }
 
