@@ -151,6 +151,16 @@ function _tinypng_fallback($method) {
  */
 function image_tinypng_save(stdClass $image, $destination) {
   $res = _tinypng_fallback('save', $image, $destination);;
+
+  $supported_types = array(
+    'image/png',
+    'image/jpg',
+    'image/jpeg',
+  );
+  if (!in_array($image->info['mime_type'], $supported_types)) {
+    return $res;
+  }
+
   try {
     if (tinypng_load_library()) {
       $dest = drupal_realpath($destination);
