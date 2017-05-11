@@ -1,0 +1,4 @@
+tinypng.settings.form:
+  title: 'TinyPNG Settings'
+  parent: system.admin_config_media
+  route_name: tinypng.settings.form
