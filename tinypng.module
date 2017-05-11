@@ -23,9 +23,8 @@ function tinypng_entity_presave(EntityInterface $entity) {
   }
 
   // Skip if no api key is set or OnUpload method is not enabled.
-  $config = \Drupal::config('tinypng.settings');
-  $api_key = $config->get('api_key');
-  $on_upload = (bool) $config->get('on_upload');
+  $api_key = tinypng_api_key();
+  $on_upload = tinypng_handle_on_upload();
   if (empty($api_key) || empty($on_upload)) {
     return;
   }
@@ -36,7 +35,7 @@ function tinypng_entity_presave(EntityInterface $entity) {
   $dest = \Drupal::service('file_system')->realpath($image_path);
 
   try {
-    if ($config->get('upload_method') == 'download') {
+    if (tinypng_on_upload_method() == 'download') {
       $origin = file_create_url($image_path);
       $tinyfy_source = \Tinify\fromUrl($origin);
     }
