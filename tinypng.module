@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_entity_presave().
@@ -92,4 +93,34 @@ function tinypng_is_mime_supported($mime) {
     'image/jpeg',
   );
   return in_array($mime, $supported_types);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function tinypng_form_image_style_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (tinypng_api_key() && tinypng_handle_with_image_actions()) {
+    return;
+  }
+
+  /** @var \Drupal\image\Form\ImageStyleEditForm $form_object */
+  $form_object = $form_state->getFormObject();
+
+  /** @var \Drupal\image\Entity\ImageStyle $image_style */
+  $image_style = $form_object->getEntity();
+
+  // Remove TinyPNG from selectable list.
+  unset($form['effects']['new']['effect']['data']['new']['#options']['tinypng_tinypng']);
+
+  // Mark TinyPNG effect as disabled.
+  foreach ($image_style->getEffects() as $effect) {
+    /** @var \Drupal\image\ImageEffectBase $effect */
+    if ('tinypng_tinypng' != $effect->getPluginId()) {
+      continue;
+    }
+
+    $key = $effect->getUuid();
+    $label = $effect->label() . ' ' . t('(Disabled)');
+    $form['effects'][$key]['effect']['data']['label']['#plain_text'] = $label;
+  }
 }
