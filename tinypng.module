@@ -17,6 +17,11 @@ function tinypng_entity_presave(EntityInterface $entity) {
     return;
   }
 
+  /** @var \Drupal\file\Entity\File $entity */
+  if (!tinypng_is_mime_supported($entity->getMimeType())) {
+    return;
+  }
+
   // Skip if no api key is set or OnUpload method is not enabled.
   $config = \Drupal::config('tinypng.settings');
   $api_key = $config->get('api_key');
@@ -44,4 +49,16 @@ function tinypng_entity_presave(EntityInterface $entity) {
   catch (Exception $ex) {
     \Drupal::logger('tinypng')->error($ex->getMessage());
   }
+}
+
+/**
+ * Check mime type is supported.
+ */
+function tinypng_is_mime_supported($mime) {
+  $supported_types = array(
+    'image/png',
+    'image/jpg',
+    'image/jpeg',
+  );
+  return in_array($mime, $supported_types);
 }
