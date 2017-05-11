@@ -70,7 +70,7 @@ class SettingsForm extends ConfigFormBase {
     $this->config('tinypng.settings')
       ->set('api_key', $values['api_key'])
       ->set('on_upload', (bool) $values['on_upload'])
-      ->set('integration_method', $values['integration_method'])
+      ->set('upload_method', $values['upload_method'])
       ->save();
   }
 
