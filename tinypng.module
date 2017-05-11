@@ -59,6 +59,14 @@ function tinypng_api_key() {
 }
 
 /**
+ * Check ImageAction mode is enabled.
+ */
+function tinypng_handle_with_image_actions() {
+  $config = \Drupal::config('tinypng.settings');
+  return (bool) $config->get('image_action');
+}
+
+/**
  * Check OnUpload mode is enabled.
  */
 function tinypng_handle_on_upload() {
