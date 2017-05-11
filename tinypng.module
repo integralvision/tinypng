@@ -52,6 +52,30 @@ function tinypng_entity_presave(EntityInterface $entity) {
 }
 
 /**
+ * Get TinyPNG API key.
+ */
+function tinypng_api_key() {
+  $config = \Drupal::config('tinypng.settings');
+  return $config->get('api_key');
+}
+
+/**
+ * Check OnUpload mode is enabled.
+ */
+function tinypng_handle_on_upload() {
+  $config = \Drupal::config('tinypng.settings');
+  return (bool) $config->get('on_upload');
+}
+
+/**
+ * Get OnUpload method.
+ */
+function tinypng_on_upload_method() {
+  $config = \Drupal::config('tinypng.settings');
+  return $config->get('upload_method');
+}
+
+/**
  * Check mime type is supported.
  */
 function tinypng_is_mime_supported($mime) {
