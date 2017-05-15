@@ -28,8 +28,7 @@ class TinyPngImageEffect extends ImageEffectBase {
       return FALSE;
     }
 
-    // @todo implement this.
-    return FALSE;
+    return $image->apply('tinypng_tinypng');
   }
 
   /**
