@@ -32,21 +32,21 @@ class SettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, Request $request = NULL) {
     $config = $this->config('tinypng.settings');
-    $form['api_key'] = array(
+    $form['api_key'] = [
       '#type' => 'textfield',
       '#title' => $this->t('API Key'),
       '#default_value' => $config->get('api_key'),
       '#required' => TRUE,
-    );
+    ];
 
-    $form['on_upload'] = array(
+    $form['on_upload'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Compress on upload'),
       '#default_value' => $config->get('on_upload'),
       '#description' => $this->t('Enable this if you want to compress every uploaded image.')
-    );
+    ];
 
-    $form['upload_method'] = array(
+    $form['upload_method'] = [
       '#type' => 'select',
       '#title' => $this->t('Integration Method'),
       '#default_value' => $config->get('upload_method'),
@@ -62,14 +62,14 @@ class SettingsForm extends ConfigFormBase {
       '#description' => $this->t('The download method requires that your site is hosted
        in a server accessible through the internet. The upload method is required
        on localhost.')
-    );
+    ];
 
-    $form['image_action'] = array(
+    $form['image_action'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable TinyPNG image action'),
       '#default_value' => $config->get('image_action'),
       '#description' => $this->t('Define the TinyPNG image action that you can add to any of your image styles.')
-    );
+    ];
 
     return parent::buildForm($form, $form_state);
   }

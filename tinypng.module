@@ -87,11 +87,11 @@ function tinypng_on_upload_method() {
  * Check mime type is supported.
  */
 function tinypng_is_mime_supported($mime) {
-  $supported_types = array(
+  $supported_types = [
     'image/png',
     'image/jpg',
     'image/jpeg',
-  );
+  ];
   return in_array($mime, $supported_types);
 }
 
