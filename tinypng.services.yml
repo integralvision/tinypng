@@ -1,0 +1,4 @@
+services:
+  tinypng.compress:
+    class: Drupal\tinypng\TinyPng
+    arguments: ['@config.factory', '@file_system']
