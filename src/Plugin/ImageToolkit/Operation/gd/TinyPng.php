@@ -26,6 +26,8 @@ class TinyPng extends GDImageToolkitOperationBase {
   protected $fileSystem;
 
   protected $tempFileName;
+  protected $tempUri;
+  protected $resultUri;
   protected $tempPath;
   protected $resultPath;
 
@@ -45,8 +47,11 @@ class TinyPng extends GDImageToolkitOperationBase {
     $temp_result = $this->getResultPath();
 
     $this->getToolkit()->save($temp_file);
-    $tinypng = \Tinify\fromFile($temp_file);
-    $tinypng->toFile($temp_result);
+
+    /** @var \Drupal\tinypng\TinyPng $tinypng */
+    $tinypng = \Drupal::service('tinypng.compress');
+    $tinypng->setFromFile($this->getTempUri());
+    $tinypng->saveTo($this->getResultUri());
 
     $function = 'imagecreatefrom' . image_type_to_extension($this->getToolkit()->getType(), FALSE);
     $resource = $function($temp_result);
@@ -78,18 +83,35 @@ class TinyPng extends GDImageToolkitOperationBase {
     return $this->tempFileName;
   }
 
+  protected function getTempUri() {
+    if (!$this->tempUri) {
+      $temp_file_name = $this->getTempFileName();
+      $this->tempUri = $temp_file_name . '_1';
+    }
+    return $this->tempUri;
+  }
+
+  protected function getResultUri() {
+    if (!$this->resultUri) {
+      $temp_file_name = $this->getTempFileName();
+      $this->resultUri = $temp_file_name . '_2';
+    }
+
+    return $this->resultUri;
+  }
+
   protected function getTempPath() {
     if (!$this->tempPath) {
-      $temp_file_name = $this->getTempFileName();
-      $this->tempPath = $this->getFilesystem()->realpath($temp_file_name . '_1');
+      $temp_uri= $this->getTempUri();
+      $this->tempPath = $this->getFilesystem()->realpath($temp_uri);
     }
     return $this->tempPath;
   }
 
   protected function getResultPath() {
     if (!$this->resultPath) {
-      $temp_file_name = $this->getTempFileName();
-      $this->resultPath = $this->getFilesystem()->realpath($temp_file_name . '_2');
+      $result_uri = $this->getResultUri();
+      $this->resultPath = $this->getFilesystem()->realpath($result_uri);
     }
     return $this->resultPath;
   }

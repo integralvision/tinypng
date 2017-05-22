@@ -30,21 +30,20 @@ function tinypng_entity_presave(EntityInterface $entity) {
     return;
   }
 
+  /** @var \Drupal\tinypng\TinyPng $tinypng */
+  $tinypng = \Drupal::service('tinypng.compress');
+
   // Compress image.
   $image_path = $entity->getFileUri();
-  \Tinify\setKey($api_key);
-  $dest = \Drupal::service('file_system')->realpath($image_path);
-
   try {
     if (tinypng_on_upload_method() == 'download') {
-      $origin = file_create_url($image_path);
-      $tinyfy_source = \Tinify\fromUrl($origin);
+      $tinypng->setFromUrl($image_path);
     }
     else {
-      $tinyfy_source = \Tinify\fromFile($dest);
+      $tinypng->setFromFile($image_path);
     }
 
-    $res = $tinyfy_source->toFile($dest);
+    $res = $tinypng->saveTo($image_path);
   }
   catch (Exception $ex) {
     \Drupal::logger('tinypng')->error($ex->getMessage());
