@@ -2,6 +2,7 @@
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\image\ImageStyleInterface;
 
 /**
  * Implements hook_entity_presave().
@@ -108,5 +109,30 @@ function tinypng_form_image_style_edit_form_alter(&$form, FormStateInterface $fo
   /** @var \Drupal\image\Entity\ImageStyle $image_style */
   $image_style = $form_object->getEntity();
 
-  // @todo make possible to enable/disable TinyPng compression for edited style.
+  $form['tinypng_compress'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Compress with TinyPNG', [], ['context' => 'tinypng']),
+    '#default_value' => $image_style->getThirdPartySetting('tinypng', 'tinypng_compress'),
+    '#weight' => $form['effects']['#weight'] + 0.1,
+  ];
+  $form['#entity_builders'][] = 'tinypng_image_style_edit_form_builder';
+}
+
+/**
+ * Entity form builder to add the TinyPNG settings to ImageStyle.
+ *
+ * @param string $entity_type_id
+ *   Entity type ID.
+ * @param \Drupal\image\ImageStyleInterface $image_style
+ *   Edited ImageStyle instance.
+ * @param array $form
+ *   Entity form to alter.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function tinypng_image_style_edit_form_builder($entity_type_id, ImageStyleInterface $image_style, array &$form, FormStateInterface $form_state) {
+  $image_style->setThirdPartySetting('tinypng', 'tinypng_compress', $form_state->getValue('tinypng_compress'));
+  $image_style->save();
 }
