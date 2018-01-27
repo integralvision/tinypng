@@ -16,7 +16,7 @@ class RouteSubscriber extends RouteSubscriberBase {
       $route->setDefault('_controller', '\Drupal\tinypng\Controller\TinyPngImageStyleDownloadController::deliver');
     }
     if ($route = $collection->get('image.style_private')) {
-      //$route->setDefault('_controller', '\Drupal\tinypng\Controller\TinyPngImageStyleDownloadController::deliver');
+      $route->setDefault('_controller', '\Drupal\tinypng\Controller\TinyPngImageStyleDownloadController::deliver');
     }
   }
 
