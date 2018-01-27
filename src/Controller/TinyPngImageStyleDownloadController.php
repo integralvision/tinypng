@@ -16,7 +16,8 @@ class TinyPngImageStyleDownloadController extends ImageStyleDownloadController {
   /**
    * {@inheritdoc}
    *
-   * This is not a good solution.
+   * This is not a good solution. Replace this if
+   * https://www.drupal.org/project/drupal/issues/2940016 is closed.
    */
   public function deliver(Request $request, $scheme, ImageStyleInterface $image_style) {
     // If compression is not enabled for image style use core image deliver
