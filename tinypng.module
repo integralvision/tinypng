@@ -98,7 +98,7 @@ function tinypng_is_mime_supported($mime) {
  * Implements hook_form_FORM_ID_alter().
  */
 function tinypng_form_image_style_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if (tinypng_api_key() && tinypng_handle_with_image_actions()) {
+  if (!tinypng_api_key() || !tinypng_handle_with_image_actions()) {
     return;
   }
 
