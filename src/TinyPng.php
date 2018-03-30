@@ -103,6 +103,7 @@ class TinyPng {
       }
       $this->apiKey = $key;
       \Tinify\setKey($key);
+      \Tinify\setAppIdentifier('Drupal/' . \Drupal::VERSION);
     }
     return $this;
   }
