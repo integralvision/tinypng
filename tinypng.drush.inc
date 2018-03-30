@@ -11,7 +11,7 @@ define('TINIFY_PHP_VERSION', '1.3.0');
 define('TINIFY_PHP_DOWNLOAD_URI', 'https://github.com/tinify/tinify-php/archive/' . TINIFY_PHP_VERSION . '.zip');
 
 /**
- * Implements of hook_drush_command().
+ * Implements hook_drush_command().
  */
 function tinypng_drush_command() {
   $items = array();
@@ -30,7 +30,7 @@ function tinypng_drush_command() {
 }
 
 /**
- * Implements of hook_drush_help().
+ * Implements hook_drush_help().
  */
 function tinypng_drush_help($section) {
   switch ($section) {
@@ -76,7 +76,7 @@ function drush_tinypng_tinify_download() {
   // Download the zip archive.
   if ($filepath = drush_download_file(TINIFY_PHP_DOWNLOAD_URI, TINIFY_PHP_VERSION . '.zip')) {
     $filename = basename($filepath);
-    $dirname =  basename($filepath, '.zip');
+    $dirname = basename($filepath, '.zip');
 
     // Remove any existing Tinify PHP library directory.
     if (is_dir($dirname) || is_dir(TINIFY_PHP_DIRNAME)) {
