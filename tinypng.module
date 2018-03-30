@@ -68,6 +68,7 @@ function tinypng_load_library() {
   }
 
   Tinify\setKey($api_key);
+  Tinify\setAppIdentifier('Drupal/' . VERSION);
   return TRUE;
 }
 
