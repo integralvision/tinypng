@@ -43,7 +43,7 @@ class SettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Compress on upload'),
       '#default_value' => $config->get('on_upload'),
-      '#description' => $this->t('Enable this if you want to compress every uploaded image.')
+      '#description' => $this->t('Enable this if you want to compress every uploaded image.'),
     ];
 
     $form['upload_method'] = [
@@ -61,14 +61,14 @@ class SettingsForm extends ConfigFormBase {
       ],
       '#description' => $this->t('The download method requires that your site is hosted
        in a server accessible through the internet. The upload method is required
-       on localhost.')
+       on localhost.'),
     ];
 
     $form['image_action'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable TinyPNG image action'),
       '#default_value' => $config->get('image_action'),
-      '#description' => $this->t('Define the TinyPNG image action that you can add to any of your image styles.')
+      '#description' => $this->t('Define the TinyPNG image action that you can add to any of your image styles.'),
     ];
 
     return parent::buildForm($form, $form_state);

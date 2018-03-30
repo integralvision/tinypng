@@ -42,7 +42,7 @@ class TinyPng {
   /**
    * Tinify Source.
    *
-   * @var \Tinify\Source;
+   * @var \Tinify\Source
    */
   protected $tinyfySource;
 

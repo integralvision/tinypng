@@ -5,6 +5,11 @@ namespace Drupal\tinypng\Routing;
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
 
+/**
+ * Class RouteSubscriber.
+ *
+ * @package Drupal\tinypng\Routing
+ */
 class RouteSubscriber extends RouteSubscriberBase {
 
   /**

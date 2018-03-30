@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * TinyPng module.
+ */
+
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\image\ImageStyleInterface;
@@ -44,7 +49,7 @@ function tinypng_entity_presave(EntityInterface $entity) {
       $tinypng->setFromFile($image_path);
     }
 
-    $res = $tinypng->saveTo($image_path);
+    $tinypng->saveTo($image_path);
   }
   catch (Exception $ex) {
     \Drupal::logger('tinypng')->error($ex->getMessage());

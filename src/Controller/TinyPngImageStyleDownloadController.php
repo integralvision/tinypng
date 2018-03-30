@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Drupal\Component\Utility\Crypt;
 
+/**
+ * Class TinyPngImageStyleDownloadController.
+ *
+ * @package Drupal\tinypng\Controller
+ */
 class TinyPngImageStyleDownloadController extends ImageStyleDownloadController {
 
   /**
@@ -22,7 +27,7 @@ class TinyPngImageStyleDownloadController extends ImageStyleDownloadController {
   public function deliver(Request $request, $scheme, ImageStyleInterface $image_style) {
     // If compression is not enabled for image style use core image deliver
     // method.
-    if (!$image_style->getThirdPartySetting('tinypng','tinypng_compress')) {
+    if (!$image_style->getThirdPartySetting('tinypng', 'tinypng_compress')) {
       return parent::deliver($request, $scheme, $image_style);
     }
 
@@ -101,10 +106,11 @@ class TinyPngImageStyleDownloadController extends ImageStyleDownloadController {
     elseif ($image_style->createDerivative($image_uri, $derivative_uri)) {
       $success = TRUE;
       try {
-       /** @var \Drupal\tinypng\TinyPng $tinypng */
-       $tinypng = \Drupal::service('tinypng.compress');
-       $tinypng->setFromFile($derivative_uri);
-       $res = $tinypng->saveTo($derivative_uri);
+        /** @var \Drupal\tinypng\TinyPng $tinypng */
+        $tinypng = \Drupal::service('tinypng.compress');
+        $tinypng->setFromFile($derivative_uri);
+        $res = $tinypng->saveTo($derivative_uri);
+        $success = (bool) $res;
       }
       catch (\Exception $ex) {
         \Drupal::logger('tinypng')->error($ex->getMessage());
@@ -133,4 +139,5 @@ class TinyPngImageStyleDownloadController extends ImageStyleDownloadController {
       return new Response($this->t('Error generating image.'), 500);
     }
   }
+
 }
