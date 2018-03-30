@@ -7,7 +7,7 @@
 /**
  * The TinyPNG library URI.
  */
-define('TINIFY_PHP_VERSION', '1.3.0');
+define('TINIFY_PHP_VERSION', '1.5.2');
 define('TINIFY_PHP_DOWNLOAD_URI', 'https://github.com/tinify/tinify-php/archive/' . TINIFY_PHP_VERSION . '.zip');
 
 /**
